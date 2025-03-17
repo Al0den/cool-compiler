@@ -70,6 +70,15 @@ Token Lexer::nextToken() {
     char c = get();
 
     switch (c) {
+    case '<':
+        if(!isAtEnd() && peek() == '-') {
+            get();
+            return makeToken(TokenType::ASSIGN, "<-");
+        } else {
+            std::stringstream err;
+            err << "Unexpected character '<' at line " << line;
+            throw std::runtime_error(err.str());
+        }
     case '+':
         return makeToken(TokenType::PLUS, "+");
     case '-':
@@ -94,6 +103,8 @@ Token Lexer::nextToken() {
         return makeToken(TokenType::SEMICOLON, ";");
     case ',':
         return makeToken(TokenType::COMMA, ",");
+    case '.':
+        return makeToken(TokenType::DOT, ".");
     case '"':
         return lexString();
     default:
